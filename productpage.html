@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,500;0,700;1,100;1,200;1,400;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/productpage.css">
+    <title>Product Page</title>
+</head>
+<body>
+    <header>
+        <div class="navegation">
+            <a href="#"></a>
+            <a href="#"></a>
+            <a class="logo" href="index.html"><img src="assets/logodrihy.jpg" alt="" width="200px" height="100px"></a>
+            <ul class="nav-list">
+                <li>
+                    <a href="shop.html">shop</a>
+                </li>
+                <li>
+                    <a href="contact.html">contact</a>
+                </li>
+                <li>
+                    <a href="login.html">login</a>
+                </li>
+                <li>
+                    <a href="cart.html">cart</a>
+                </li>
+            </ul>
+            <div class="mobile-menu">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+        </div>
+        <script src="/js/mobile-navbar.js"></script>
+    </header>
+    <main>
+        <div>
+            <div class="productimg">
+                <img id="productImage" alt="Product Image" />
+            </div>
+        </div>
+        <div class="containerproduct">
+            <div class="informationsproduct">
+                <h1 id="productName"></h1>
+                <h2 id="productPrice"></h2>
+            </div>
+            <div class="selectproductsize">
+                <p>size</p>
+                <select name="size" id="sizeselect">
+                    <option>Small</option>
+                    <option>Medium</option>
+                    <option>Large</option>
+                    <option>XLarge</option>
+                    <option>XXLarge</option>
+                </select>
+            </div>
+            <div class="continuarbuttonproduct">
+                <a href="cart.html">Continuar</a>
+            </div>
+        </div>
+    </main>
+    <script>
+        async function fetchProductData() {
+            try {
+                const params = new URLSearchParams(window.location.search);
+                const slug = params.get('slug');
+
+                const response = await fetch("https://graphql.datocms.com/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Accept: "application/json",
+                        Authorization: `Bearer b5c82608889cf13b3dbfb84fd48019`,
+                    },
+                    body: JSON.stringify({
+                        query: `
+                        {
+                            allProducts {
+                                slug
+                                productName
+                                productPrice
+                                productType
+                                productImage {
+                                    responsiveImage(imgixParams: {auto: [compress, format]}) {
+                                        src
+                                    }
+                                }
+                            }
+                        }
+                        `,
+                    }),
+                });
+
+                const json = await response.json();
+                const data = json.data.allProducts;
+
+                const product = data.find(p => p.slug === slug);
+
+                if (product) {
+                    document.getElementById('productImage').src = product.productImage.responsiveImage.src;
+                    document.getElementById('productName').textContent = product.productName;
+                    document.getElementById('productPrice').textContent = product.productPrice;
+                } else {
+                    console.error('Product not found');
+                }
+            } catch (error) {
+                console.error('Error fetching product data:', error);
+            }
+        }
+
+        fetchProductData();
+    </script>
+</body>
+</html>
