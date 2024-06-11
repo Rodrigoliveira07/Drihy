@@ -15,7 +15,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyDIF0F6kfrjBsGNPGcy5ZCOICELNUIuKeo",
   authDomain: "drihymode-e8a85.firebaseapp.com",
   projectId: "drihymode-e8a85",
-  storageBucket: "drihymode-e8a85",
+  storageBucket: "drihymode-e8a85.appspot.com",
   messagingSenderId: "420389069070",
   appId: "1:420389069070:web:2bd2a6a191790d940af75f",
 };
@@ -41,7 +41,6 @@ function register(event) {
 
       const user_data = {
         email: email,
-        password: password,
         last_login: Date.now(),
       };
 
@@ -100,6 +99,6 @@ function validate_password(password) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById("registerForm").addEventListener("submit", register);
   document.getElementById("loginForm").addEventListener("submit", login);
+  document.getElementById("registerForm").addEventListener("submit", register);
 });
