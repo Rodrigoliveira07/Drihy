@@ -60,7 +60,10 @@
                 </select>
             </div>
             <div class="continuarbuttonproduct">
-                <a href="cart.html">Continuar</a>
+                <input type="submit" value="Adicionar ao Carrinho" id="addToCartButton" /> 
+            </div>
+            <div class="continuarbuttonproduct">
+                <input type="submit" value="Comprar Agora" id="buyNowButton" />
             </div>
         </div>
     </main>
@@ -105,6 +108,15 @@
                     document.getElementById('productImage').src = product.productImage.responsiveImage.src;
                     document.getElementById('productName').textContent = product.productName;
                     document.getElementById('productPrice').textContent = product.productPrice;
+
+                    document.getElementById('addToCartButton').addEventListener('click', () => {
+                        addToCart(product);
+                    });
+
+                    document.getElementById('buyNowButton').addEventListener('click', () => {
+                        addToCart(product);
+                        window.location.href = 'cart.html';
+                    });
                 } else {
                     console.error('Product not found');
                 }
@@ -113,8 +125,23 @@
             }
         }
 
+        function addToCart(product) {
+            const size = document.getElementById('sizeselect').value;
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const cartItem = { ...product, size, quantity: 1 };
+
+            const existingItemIndex = cart.findIndex(item => item.slug === product.slug && item.size === size);
+            if (existingItemIndex > -1) {
+                cart[existingItemIndex].quantity += 1;
+            } else {
+                cart.push(cartItem);
+            }
+
+            localStorage.setItem('cart', JSON.stringify(cart));
+            alert('Produto adicionado ao carrinho!');
+        }
+
         fetchProductData();
-        
     </script>
 </body>
 </html>
