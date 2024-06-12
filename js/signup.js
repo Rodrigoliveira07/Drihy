@@ -99,6 +99,13 @@ function validate_password(password) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById("loginForm").addEventListener("submit", login);
-  document.getElementById("registerForm").addEventListener("submit", register);
+  const registerForm = document.getElementById("registerForm");
+  if (registerForm) {
+    registerForm.addEventListener("submit", register);
+  }
+
+  const loginForm = document.getElementById("loginForm");
+  if (loginForm) {
+    loginForm.addEventListener("submit", login);
+  }
 });
